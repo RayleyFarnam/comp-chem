@@ -1,4 +1,4 @@
-#!/opt/miniconda3/envs/python2.7/bin/python
+#!/usr/bin/python3
 
 ## J. Agarwal
 ## Rev 1: 5/24/13
@@ -8,7 +8,7 @@
 ## Rev 2.3 12/27/16 D. Brandon Magers
 
 ### Import required modules ###
-import commands
+import subprocess
 import xml.etree.ElementTree as ET
 from optparse import OptionParser as OP
 import time
@@ -19,7 +19,7 @@ import yaml
 ### Functions ###
 
 def qstat(path):
-   if os.path.exists(path): return commands.getoutput(path+" -f -x") 
+   if os.path.exists(path): return subprocess.getoutput(path+" -f -x") 
    else: 
       print("qstat command not found...exiting.")
       sys.exit()
@@ -59,7 +59,7 @@ def get_qinfo_data(options):
    jobInfo = {} # queue: [[user, name, state, id]]
    queueInfo['batch'] = [15,0]
    # Parse qstat output
-   qstatOutput = qstat(commands.getoutput("which qstat"))
+   qstatOutput = qstat(subprocess.getoutput("which qstat"))
    if qstatOutput == "":
       return queueInfo, jobInfo
    qstatXml = ET.fromstring(qstatOutput)
@@ -145,7 +145,7 @@ def print_qinfo_data(queueInfo, jobInfo, options):
    completeFile = "/home/"+logname+"/.queue_complete"
    if os.path.exists(completeFile):
       fullWidth = (colSum+1) * len(queueInfo)
-      recentJobs = yaml.load(commands.getoutput("tail -"+str(6*options.completed)+" "+completeFile))
+      recentJobs = yaml.load(subprocess.getoutput("tail -"+str(6*options.completed)+" "+completeFile))
       if len(recentJobs) != 0: 
          print((" Recently Completed Jobs for "+options.logname+":").ljust(58)+endLine)
          print(bold("ID".center(nCol))+bold("  Job Name".ljust(fCol+sCol))+bold("Stop Time".ljust(tCol+frCol))+bold("Elap. Time".ljust(ffCol))+endLine)
