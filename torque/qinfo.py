@@ -67,12 +67,12 @@ def get_qinfo_data(options):
    # Data structures
    for job in qstatXml.iter("Job"):
       data = find_job_data(job)
-      if jobInfo.has_key('batch'): jobInfo['batch'].append(data)
+      if jobInfo.__contains__('batch'): jobInfo['batch'].append(data)
       else: jobInfo["batch"] = [data]
    return queueInfo, jobInfo
 
 def print_qinfo_data(queueInfo, jobInfo, options): 
-   allbox = u''.join(unichr(9472 + x) for x in range(200))
+   allbox = u''.join(chr(9472 + x) for x in range(200))
    box = [ allbox[i] for i in (2, 0, 12, 16, 20, 24, 44, 52, 28, 36, 60) ]
    (vbar, hbar, ul, ur, ll, lr, nt, st, wt, et, plus) = box
    # Print title card
@@ -135,7 +135,7 @@ def print_qinfo_data(queueInfo, jobInfo, options):
    # Summary of additional jobs or blank line
    printLine = ""
    for queue in sorted(queueInfo):
-      if jobInfo.has_key(queue):
+      if jobInfo.__contains__(queue):
          if len(jobInfo[queue]) > options.numJobs:
             printLine += grey((" +"+str(len(jobInfo[queue])-options.numJobs)+" more jobs").center(colSum))+endLine
          else: printLine += blank
